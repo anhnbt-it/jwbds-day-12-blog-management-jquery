@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,11 +36,15 @@ public class BlogController {
         return modelAndView;
     }
 
-    @GetMapping(value = "search/{query}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Blog> findAllByTitleContains(@PathVariable("query") Optional<String> query) {
-        System.out.println(query.get());
-        List<Blog> blogs = blogService.findAllByTitleContains(query.get());
+    public Page<Blog> findAllByTitleContains(@RequestParam("s") Optional<String> s, Pageable pageable) {
+        Page<Blog> blogs;
+        if (s.isPresent()) {
+            blogs = blogService.findAllByTitleContains(s.get(), pageable);
+        } else {
+            blogs = blogService.findAll(pageable);
+        }
         return blogs;
     }
 
