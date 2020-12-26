@@ -33,6 +33,7 @@ public class BlogController {
         }
         modelAndView.addObject("blogs", blogs);
         modelAndView.addObject("search", s);
+        modelAndView.addObject("title", "List of Blogs");
         return modelAndView;
     }
 
